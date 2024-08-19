@@ -1,0 +1,31 @@
+# https://bobcares.com/blog/install-portainer-docker-compose/
+
+services:
+  # https://hub.docker.com/r/portainer/portainer-ce
+  portainer:
+    container_name: portainer
+    image: "portainer/portainer-ce:${PORTAINER_VERSION:-latest}"
+    restart: unless-stopped
+    ports:
+      - target: 9443
+        published: ${PORTAINER_PORT:-9443}
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: /etc/localtime
+        target: /etc/localtime
+        read_only: true
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+      - type: bind
+        source: ./volumes/portainer/data
+        target: /data
+        bind:
+          create_host_path: true
+
+# Comment the following network section if you are not using a reverse proxy such as Nginx Proxy Manager
+networks:
+  proxy-network:
+    external: true

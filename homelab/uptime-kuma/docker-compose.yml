@@ -1,0 +1,22 @@
+# https://github.com/louislam/uptime-kuma/blob/1.23.X/docker/docker-compose.yml
+
+services:
+  # https://hub.docker.com/r/louislam/uptime-kuma
+  uptime-kuma:
+    container_name: uptime-kuma
+    image: "louislam/uptime-kuma:${UPTIME_KUMA_VERSION:-1}"
+    restart: unless-stopped
+    ports:
+      - target: 3001
+        published: ${UPTIME_KUMA_PORT:-3001}
+    volumes:
+      - type: bind
+        source: ./volumes/uptime-kuma/data
+        target: /app/data
+        bind:
+          create_host_path: true
+
+# Comment the following network section if you are not using a reverse proxy such as Nginx Proxy Manager
+networks:
+  proxy-network:
+    external: true

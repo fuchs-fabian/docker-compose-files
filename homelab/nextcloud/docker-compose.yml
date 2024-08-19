@@ -1,0 +1,60 @@
+# Preparations:
+# Database host for MySQL/MariaDB: mariadb:3306
+#
+# Enabling External Storage Support for SMB:
+# https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/external_storage_configuration_gui.html
+#
+# Add trusted domain (reverse proxy): /var/www/nextcloud/config/config.php
+#
+# https://docs.linuxserver.io/general/swag/#nextcloud-subdomain-reverse-proxy-example
+# https://github.com/linuxserver/docker-nextcloud/issues/170
+
+services:
+  # https://hub.docker.com/r/linuxserver/nextcloud
+  nextcloud:
+    container_name: nextcloud
+    image: "lscr.io/linuxserver/nextcloud:${NEXTCLOUD_VERSION:-latest}"
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+    ports:
+      - target: 443
+        published: ${NEXTCLOUD_TLS_PORT:-443}
+        protocol: tcp
+    environment:
+      PUID: "${NEXTCLOUD_PUID:-1000}"
+      PGID: "${NEXTCLOUD_PGID:-1000}"
+      TZ: "${TZ:-Europe/Berlin}"
+    volumes:
+      - type: bind
+        source: ./volumes/nextcloud/config
+        target: /config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ./volumes/nextcloud/data
+        target: /data
+        bind:
+          create_host_path: true
+
+  mariadb:
+    container_name: nextcloud_db
+    image: "mariadb:${NEXTCLOUD_DB_VERSION:-latest}"
+    restart: unless-stopped
+    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+    environment:
+      MYSQL_DATABASE: "${NEXTCLOUD_DB_NAME:-nextcloud}"
+      MYSQL_USER: "${NEXTCLOUD_DB_USER:-nextcloud}"
+      MYSQL_ROOT_PASSWORD: "${NEXTCLOUD_DB_ROOT_PASSWORD:-admin1234}"
+      MYSQL_PASSWORD: "${NEXTCLOUD_DB_PASSWORD:-admin4321}"
+    volumes:
+      - type: bind
+        source: ./volumes/mariadb/mysql
+        target: /var/lib/mysql
+        bind:
+          create_host_path: true
+
+# Comment the following network section if you are not using a reverse proxy such as Nginx Proxy Manager
+networks:
+  proxy-network:
+    external: true

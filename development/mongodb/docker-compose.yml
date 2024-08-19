@@ -1,0 +1,28 @@
+services:
+  # https://hub.docker.com/_/mongo
+  mongodb:
+    container_name: mongodb
+    image: "mongo:${MONGODB_VERSION:-4.4.7}"
+    restart: unless-stopped
+    ports:
+      - target: 27017
+        published: ${MONGODB_PORT:-27017}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${MONGODB_ROOT_USER:-admin}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGODB_ROOT_PASSWORD:-admin1234}"
+    volumes:
+      - type: bind
+        source: ./volumes/mongodb/db
+        target: /data/db
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ./volumes/mongodb/configdb
+        target: /data/configdb
+        bind:
+          create_host_path: true
+
+# Comment the following network section if you are not using a reverse proxy such as Nginx Proxy Manager
+networks:
+  proxy-network:
+    external: true

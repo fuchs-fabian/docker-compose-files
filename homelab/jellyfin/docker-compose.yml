@@ -1,0 +1,37 @@
+services:
+  # https://hub.docker.com/r/jellyfin/jellyfin
+  jellyfin:
+    container_name: jellyfin
+    image: "jellyfin/jellyfin:${JELLYFIN_VERSION:-latest}"
+    restart: unless-stopped
+    ports:
+      - target: 8096
+        published: ${JELLYFIN_PORT:-8096}
+        protocol: tcp
+      - target: 8920
+        published: ${JELLYFIN_TLS_PORT:-8920}
+        protocol: tcp
+    environment:
+      PUID: "${JELLYFIN_PUID:-1000}"
+      PGID: "${JELLYFIN_PGID:-1000}"
+      TZ: "${TZ:-Europe/Berlin}"
+    volumes:
+      - type: bind
+        source: ./volumes/jellyfin/config
+        target: /config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ./volumes/jellyfin/cache
+        target: /cache
+        bind:
+          create_host_path: true
+      - type: bind
+        source: "${JELLYFIN_MEDIA:-/mnt/nas}"
+        target: /media
+        read_only: true
+
+# Comment the following network section if you are not using a reverse proxy such as Nginx Proxy Manager
+networks:
+  proxy-network:
+    external: true

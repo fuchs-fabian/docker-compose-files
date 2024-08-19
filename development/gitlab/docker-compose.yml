@@ -1,0 +1,41 @@
+# TODO: Registries, Pages, Nginx Proxy Manager (Reverse Proxy) and co are not yet supported...
+
+services:
+  gitlab:
+    container_name: gitlab
+    image: "gitlab/gitlab-ce:${GITLAB_VERSION:-latest}"
+    restart: unless-stopped
+    hostname: "${GITLAB_URL:-gitlab.local}"
+    ports:
+      - target: 80
+        published: ${GITLAB_PORT:-80}
+      - target: 443
+        published: ${GITLAB_TLS_PORT:-443}
+      - target: 22
+        published: ${GITLAB_SSH_PORT:-22}
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url "https://${GITLAB_URL:-gitlab.local}"
+        gitlab_rails['gitlab_shell_ssh_port'] = ${GITLAB_SSH_PORT:-22}
+    volumes:
+      - type: bind
+        source: ./volumes/gitlab/config
+        target: /etc/gitlab
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ./volumes/gitlab/logs
+        target: /var/log/gitlab
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ./volumes/gitlab/data
+        target: /var/opt/gitlab
+        bind:
+          create_host_path: true
+    shm_size: '256m'
+
+# Comment the following network section if you are not using a reverse proxy such as Nginx Proxy Manager
+networks:
+  proxy-network:
+    external: true

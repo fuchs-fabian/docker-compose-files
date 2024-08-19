@@ -1,0 +1,40 @@
+# https://github.com/pi-hole/docker-pi-hole/blob/master/examples/docker-compose.yml.example
+
+services:
+  # https://hub.docker.com/r/pihole/pihole
+  pihole:
+    container_name: pihole
+    image: "pihole/pihole:${PIHOLE_VERSION:-latest}"
+    hostname: pihole
+    restart: unless-stopped
+    ports:
+      - target: 53
+        published: 53
+        protocol: tcp
+      - target: 53
+        published: 53
+        protocol: udp
+      - target: 80
+        published: ${PIHOLE_PORT:-80}
+        protocol: tcp
+    dns:
+      - 1.1.1.1
+    environment:
+      TZ: "${TZ:-Europe/Berlin}"
+      WEBPASSWORD: "${PIHOLE_PASSWORD:-admin1234}"
+    volumes:
+      - type: bind
+        source: ./volumes/pihole/data
+        target: /etc/pihole
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ./volumes/pihole/dnsmasq.d
+        target: /etc/dnsmasq.d
+        bind:
+          create_host_path: true
+
+# Comment the following network section if you are not using a reverse proxy such as Nginx Proxy Manager
+networks:
+  proxy-network:
+    external: true
