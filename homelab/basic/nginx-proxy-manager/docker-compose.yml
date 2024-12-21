@@ -35,13 +35,13 @@ services:
           create_host_path: true
     networks:
       - proxy
-#      - sec
+      - sec
 #      - dev
 
 networks:
   proxy:
     external: true
-#  sec:
-#    external: true
+  sec:
+    external: true
 #  dev:
 #    external: true

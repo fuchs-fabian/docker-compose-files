@@ -32,8 +32,6 @@ Create therefore the following Docker network(s):
 docker network create proxy
 ```
 
-(Also for category `homelab -> advanced`)
-
 ```bash
 docker network create sec
 ```
@@ -44,4 +42,4 @@ docker network create sec
 docker network create dev
 ```
 
-If the Docker networks `sec` and or `dev` are used, the [`docker-compose.yml`](./homelab/basic/nginx-proxy-manager/docker-compose.yml) must be adapted by the Nginx Proxy Manager.
+If the Docker network `dev` is used, the [`docker-compose.yml`](./homelab/basic/nginx-proxy-manager/docker-compose.yml) must be adapted by the Nginx Proxy Manager.
