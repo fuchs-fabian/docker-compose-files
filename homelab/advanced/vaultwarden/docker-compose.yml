@@ -34,7 +34,7 @@ services:
       EXTENDED_LOGGING: "${EXTENDED_LOGGING:-false}"
     volumes:
       - type: bind
-        source: ./volumes/vaultwarden
+        source: ./volumes/vaultwarden/data
         target: /data
         bind:
           create_host_path: true
