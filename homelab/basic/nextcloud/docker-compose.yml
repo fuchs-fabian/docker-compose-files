@@ -5,6 +5,7 @@
 # https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/external_storage_configuration_gui.html
 #
 # Add trusted domain (reverse proxy): /var/www/nextcloud/config/config.php
+#   Volume (bind) path: volumes/nextcloud/config/www/nextcloud/config/config.php
 #
 # https://docs.linuxserver.io/general/swag/#nextcloud-subdomain-reverse-proxy-example
 # https://github.com/linuxserver/docker-nextcloud/issues/170
@@ -17,10 +18,10 @@ services:
     restart: unless-stopped
     depends_on:
       - mariadb
-    ports:
-      - target: 443
-        published: ${NEXTCLOUD_TLS_PORT:-443}
-        protocol: tcp
+    #    ports:
+    #      - target: 443
+    #        published: ${NEXTCLOUD_TLS_PORT:-443}
+    #        protocol: tcp
     environment:
       PUID: "${NEXTCLOUD_PUID:-1000}"
       PGID: "${NEXTCLOUD_PGID:-1000}"
@@ -36,6 +37,9 @@ services:
         target: /data
         bind:
           create_host_path: true
+    networks:
+      - net
+      - proxy
 
   mariadb:
     container_name: nextcloud_db
@@ -53,8 +57,11 @@ services:
         target: /var/lib/mysql
         bind:
           create_host_path: true
+    networks:
+      - net
 
-# Comment the following network section if you are not using a reverse proxy such as Nginx Proxy Manager
 networks:
-  proxy-network:
+  net:
+    driver: bridge
+  proxy:
     external: true

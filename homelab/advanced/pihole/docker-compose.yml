@@ -33,8 +33,9 @@ services:
         target: /etc/dnsmasq.d
         bind:
           create_host_path: true
+    networks:
+      - proxy
 
-# Comment the following network section if you are not using a reverse proxy such as Nginx Proxy Manager
 networks:
-  proxy-network:
+  proxy:
     external: true

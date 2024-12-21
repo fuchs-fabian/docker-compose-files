@@ -4,13 +4,13 @@ services:
     container_name: heimdall
     image: "lscr.io/linuxserver/heimdall:${HEIMDALL_VERSION:-latest}"
     restart: unless-stopped
-    ports:
-      - target: 80
-        published: ${HEIMDALL_PORT:-80}
-        protocol: tcp
-      - target: 443
-        published: ${HEIMDALL_TLS_PORT:-443}
-        protocol: tcp
+    #    ports:
+    #      - target: 80
+    #        published: ${HEIMDALL_PORT:-80}
+    #        protocol: tcp
+    #      - target: 443
+    #        published: ${HEIMDALL_TLS_PORT:-443}
+    #        protocol: tcp
     environment:
       PUID: "${HEIMDALL_PUID:-1000}"
       PGID: "${HEIMDALL_PGID:-1000}"
@@ -21,8 +21,9 @@ services:
         target: /config
         bind:
           create_host_path: true
+    networks:
+      - proxy
 
-# Comment the following network section if you are not using a reverse proxy such as Nginx Proxy Manager
 networks:
-  proxy-network:
+  proxy:
     external: true

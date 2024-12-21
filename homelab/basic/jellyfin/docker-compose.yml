@@ -4,13 +4,13 @@ services:
     container_name: jellyfin
     image: "jellyfin/jellyfin:${JELLYFIN_VERSION:-latest}"
     restart: unless-stopped
-    ports:
-      - target: 8096
-        published: ${JELLYFIN_PORT:-8096}
-        protocol: tcp
-      - target: 8920
-        published: ${JELLYFIN_TLS_PORT:-8920}
-        protocol: tcp
+    #    ports:
+    #      - target: 8096
+    #        published: ${JELLYFIN_PORT:-8096}
+    #        protocol: tcp
+    #      - target: 8920
+    #        published: ${JELLYFIN_TLS_PORT:-8920}
+    #        protocol: tcp
     environment:
       PUID: "${JELLYFIN_PUID:-1000}"
       PGID: "${JELLYFIN_PGID:-1000}"
@@ -30,8 +30,9 @@ services:
         source: "${JELLYFIN_MEDIA:-/mnt/nas}"
         target: /media
         read_only: true
+    networks:
+      - proxy
 
-# Comment the following network section if you are not using a reverse proxy such as Nginx Proxy Manager
 networks:
-  proxy-network:
+  proxy:
     external: true

@@ -6,10 +6,10 @@ services:
     container_name: portainer
     image: "portainer/portainer-ce:${PORTAINER_VERSION:-latest}"
     restart: unless-stopped
-    ports:
-      - target: 9443
-        published: ${PORTAINER_PORT:-9443}
-        protocol: tcp
+    #    ports:
+    #      - target: 9443
+    #        published: ${PORTAINER_PORT:-9443}
+    #        protocol: tcp
     volumes:
       - type: bind
         source: /etc/localtime
@@ -24,8 +24,9 @@ services:
         target: /data
         bind:
           create_host_path: true
+    networks:
+      - dev
 
-# Comment the following network section if you are not using a reverse proxy such as Nginx Proxy Manager
 networks:
-  proxy-network:
+  dev:
     external: true

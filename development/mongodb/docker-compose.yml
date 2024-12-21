@@ -2,7 +2,7 @@ services:
   # https://hub.docker.com/_/mongo
   mongodb:
     container_name: mongodb
-    image: "mongo:${MONGODB_VERSION:-4.4.7}"
+    image: "mongo:${MONGODB_VERSION:-latest}"
     restart: unless-stopped
     ports:
       - target: 27017
@@ -21,8 +21,8 @@ services:
         target: /data/configdb
         bind:
           create_host_path: true
+    networks:
+      - net
 
-# Comment the following network section if you are not using a reverse proxy such as Nginx Proxy Manager
 networks:
-  proxy-network:
-    external: true
+  net:

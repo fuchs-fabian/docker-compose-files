@@ -1,6 +1,7 @@
 # TODO: Registries, Pages, Nginx Proxy Manager (Reverse Proxy) and co are not yet supported...
 
 services:
+  # https://hub.docker.com/r/gitlab/gitlab-ce
   gitlab:
     container_name: gitlab
     image: "gitlab/gitlab-ce:${GITLAB_VERSION:-latest}"
@@ -33,9 +34,10 @@ services:
         target: /var/opt/gitlab
         bind:
           create_host_path: true
-    shm_size: '256m'
+    shm_size: "256m"
+    networks:
+      - dev
 
-# Comment the following network section if you are not using a reverse proxy such as Nginx Proxy Manager
 networks:
-  proxy-network:
+  dev:
     external: true
