@@ -1,8 +1,8 @@
 services:
   # https://hub.docker.com/r/vaultwarden/server
   vaultwarden:
-    image: "vaultwarden/server:${VAULTWARDEN_VERSION:-latest}"
     container_name: vaultwarden
+    image: "vaultwarden/server:${VAULTWARDEN_VERSION:-latest}"
     restart: unless-stopped
     #    ports:
     #      - target: 80
