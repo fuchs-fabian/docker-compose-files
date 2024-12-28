@@ -1,0 +1,46 @@
+services:
+  dind:
+    image: docker:${GITLAB_RUNNER_DIND_BASE_VERSION:-27}-dind
+    restart: unless-stopped
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+    command:
+      - --storage-driver=overlay2
+    networks:
+      - net
+
+  runner:
+    restart: unless-stopped
+    image: registry.gitlab.com/gitlab-org/gitlab-runner:alpine
+    depends_on:
+      - dind
+    environment:
+      - DOCKER_HOST=tcp://dind:2375
+    volumes:
+      - ./volumes/gitlab-runner/config:/etc/gitlab-runner:z
+    networks:
+      - net
+
+  register-runner:
+    restart: "no"
+    image: registry.gitlab.com/gitlab-org/gitlab-runner:alpine
+    depends_on:
+      - dind
+    command:
+      - register
+      - --non-interactive
+      - --url=${URL}
+      - --token=${TOKEN}
+      - --description=${DESCRIPTION}
+      - --executor=docker
+      - --docker-image=docker:${GITLAB_RUNNER_DIND_BASE_VERSION:-27}-dind
+      - --docker-volumes=/var/run/docker.sock:/var/run/docker.sock
+    volumes:
+      - ./volumes/gitlab-runner/config:/etc/gitlab-runner:z
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge

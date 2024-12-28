@@ -1,4 +1,12 @@
-# TODO: Registries, Pages, Nginx Proxy Manager (Reverse Proxy) and co are not yet supported...
+# https://docs.gitlab.com/ee/install/docker/installation.html#install-gitlab-by-using-docker-compose
+#
+# Get initial root password:
+#
+# ```bash
+# docker exec -it gitlab grep 'Password:' /etc/gitlab/initial_root_password
+# ```
+#
+# Attention: The initial root password is only valid for 24 hours. Change it immediately.
 
 services:
   # https://hub.docker.com/r/gitlab/gitlab-ce
@@ -6,18 +14,110 @@ services:
     container_name: gitlab
     image: "gitlab/gitlab-ce:${GITLAB_VERSION:-latest}"
     restart: unless-stopped
-    hostname: "${GITLAB_URL:-gitlab.local}"
     ports:
-      - target: 80
-        published: ${GITLAB_PORT:-80}
-      - target: 443
-        published: ${GITLAB_TLS_PORT:-443}
       - target: 22
-        published: ${GITLAB_SSH_PORT:-22}
+        published: ${GITLAB_SSH_PORT:-2424}
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url "https://${GITLAB_URL:-gitlab.local}"
-        gitlab_rails['gitlab_shell_ssh_port'] = ${GITLAB_SSH_PORT:-22}
+        external_url "https://gitlab.${DOMAIN:-example.com}"
+
+        letsencrypt['enable'] = false
+
+        nginx['enable'] = true
+        nginx['listen_https'] = false
+        nginx['listen_port'] = 80
+
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        #   _____ _____ _    _                                                        #
+        #  / ____/ ____| |  | |                                                       #
+        # | (___| (___ | |__| |                                                       #
+        #  \___ \\___ \|  __  |                                                       #
+        #  ____) |___) | |  | |                                                       #
+        # |_____/_____/|_|  |_|                                                       #
+        #                                                                             #
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+        gitlab_rails['ssh_host'] = "gitlab.${DOMAIN:-example.com}"
+        gitlab_rails['gitlab_shell_ssh_port'] = ${GITLAB_SSH_PORT:-2424}
+
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        #  _____            _     _                                                   #
+        # |  __ \          (_)   | |                                                  #
+        # | |__) |___  __ _ _ ___| |_ _ __ _   _                                      #
+        # |  _  // _ \/ _` | / __| __| '__| | | |                                     #
+        # | | \ \  __/ (_| | \__ \ |_| |  | |_| |                                     #
+        # |_|  \_\___|\__, |_|___/\__|_|   \__, |                                     #
+        #              __/ |                __/ |                                     #
+        #             |___/                |___/                                      #
+        #                                                                             #
+        # https://docs.gitlab.com/ee/administration/packages/container_registry.html  #
+        #                                                                             #
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+        registry_external_url "https://registry.${DOMAIN:-example.com}"
+
+        registry['enable'] = true
+        gitlab_rails['registry_enabled'] = true
+
+        registry_nginx['enable'] = true
+        registry_nginx['listen_https'] = false
+        registry_nginx['listen_port'] = 5050
+
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        #  _____                                                                        #
+        # |  __ \                                                                       #
+        # | |__) |_ _  __ _  ___  ___                                                   #
+        # |  ___/ _` |/ _` |/ _ \/ __|                                                  #
+        # | |  | (_| | (_| |  __/\__ \                                                  #
+        # |_|   \__,_|\__, |\___||___/                                                  #
+        #              __/ |                                                            #
+        #             |___/                                                             #
+        #                                                                               #
+        # https://docs.gitlab.com/ee/administration/pages/                              #
+        #                                                                               #
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+        pages_external_url 'https://pages.${DOMAIN:-example.com}'
+
+        gitlab_pages['enable'] = true
+        gitlab_pages['namespace_in_path'] = true
+        gitlab_pages['listen_proxy'] = "0.0.0.0:8090"
+
+        pages_nginx['enable'] = true
+        pages_nginx['listen_https'] = false
+
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        #  _  __     _                          _                                       #
+        # | |/ /    | |                        | |                                      #
+        # | ' /_   _| |__   ___ _ __ _ __   ___| |_ ___  ___                            #
+        # |  <| | | | '_ \ / _ \ '__| '_ \ / _ \ __/ _ \/ __|                           #
+        # | . \ |_| | |_) |  __/ |  | | | |  __/ ||  __/\__ \                           #
+        # |_|\_\__,_|_.__/ \___|_|  |_| |_|\___|\__\___||___/                           #
+        #                                                                               #
+        # https://docs.gitlab.com/ee/administration/clusters/kas.html                   #
+        #                                                                               #
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+        gitlab_kas['enable'] = false
+        gitlab_rails['gitlab_kas_enabled'] = false
+
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+        #  _____                          _   _                                         #
+        # |  __ \                        | | | |                                        #
+        # | |__) | __ ___  _ __ ___   ___| |_| |__   ___ _   _ ___                      #
+        # |  ___/ '__/ _ \| '_ ` _ \ / _ \ __| '_ \ / _ \ | | / __|                     #
+        # | |   | | | (_) | | | | | |  __/ |_| | | |  __/ |_| \__ \                     #
+        # |_|   |_|  \___/|_| |_| |_|\___|\__|_| |_|\___|\__,_|___/                     #
+        #                                                                               #
+        # https://docs.gitlab.com/ee/administration/monitoring/prometheus/              #
+        #                                                                               #
+        # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+        prometheus['enable'] = false
+        prometheus_monitoring['enable'] = false
+        sidekiq['metrics_enabled'] = false
+        puma['exporter_enabled'] = false
+    shm_size: "256m"
     volumes:
       - type: bind
         source: ./volumes/gitlab/config
@@ -34,7 +134,6 @@ services:
         target: /var/opt/gitlab
         bind:
           create_host_path: true
-    shm_size: "256m"
     networks:
       - dev
 
