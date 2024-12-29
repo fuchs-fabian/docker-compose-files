@@ -94,7 +94,7 @@ After that, simply start the runner.
 
 ## TODO
 
-Currently it is not yet possible for GitLab to recognize exactly which IP address has done something. You can only see the IP address of the reverse proxy.
+Support project imports.
 
 ### Known issues
 
