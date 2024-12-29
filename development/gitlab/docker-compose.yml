@@ -35,9 +35,10 @@ services:
         #  ____) |___) | |  | |                                                       #
         # |_____/_____/|_|  |_|                                                       #
         #                                                                             #
+        # https://docs.gitlab.com/ee/install/docker/configuration.html                #
+        #                                                                             #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-        gitlab_rails['ssh_host'] = "gitlab.${DOMAIN:-example.com}"
         gitlab_rails['gitlab_shell_ssh_port'] = ${GITLAB_SSH_PORT:-2424}
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -77,11 +78,12 @@ services:
         #                                                                               #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-        pages_external_url 'https://pages.${DOMAIN:-example.com}'
+        pages_external_url "https://pages.${DOMAIN:-example.com}"
 
         gitlab_pages['enable'] = true
-        gitlab_pages['namespace_in_path'] = true
         gitlab_pages['listen_proxy'] = "0.0.0.0:8090"
+        gitlab_pages['namespace_in_path'] = true
+        gitlab_pages['status_uri'] = "/@status"
 
         pages_nginx['enable'] = true
         pages_nginx['listen_https'] = false
@@ -99,7 +101,6 @@ services:
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
         gitlab_kas['enable'] = false
-        gitlab_rails['gitlab_kas_enabled'] = false
 
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         #  _____                          _   _                                         #
@@ -113,7 +114,6 @@ services:
         #                                                                               #
         # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-        prometheus['enable'] = false
         prometheus_monitoring['enable'] = false
         sidekiq['metrics_enabled'] = false
         puma['exporter_enabled'] = false
