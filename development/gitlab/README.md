@@ -62,6 +62,12 @@ View current resource usage:
 docker stats gitlab
 ```
 
+Grep for error logs:
+
+```bash
+docker logs gitlab | grep error
+```
+
 ### Runners
 
 Especially in the Homelab, it makes sense to have an instance runner that can generally be used for all projects.
