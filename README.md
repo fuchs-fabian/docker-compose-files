@@ -1,6 +1,6 @@
 # `docker-compose-files`: Docker Compose files with best practices for bind mounts, env...
 
-This repository is a collection of Docker Compose files in which some best practices are incorporated, everything relevant can be set via the `.env` files and nothing more needs to be done to the Docker Compose files themselves (except docker networks).
+This repository is a collection of Docker Compose files in which some best practices are incorporated, everything relevant can be set via the `.env` files and nothing more needs to be done to the Docker Compose files themselves.
 
 In addition, bind mounts are used for all Docker Compose containers.
 
@@ -26,20 +26,8 @@ In addition, bind mounts are used for all Docker Compose containers.
 
 Since the reverse proxy [Nginx Proxy Manager](https://nginxproxymanager.com/setup/) is used here to establish secure connections and not have to release so many ports, several Docker networks are used.
 
-Create therefore the following Docker network(s):
+Create therefore the following Docker networks:
 
 ```bash
-docker network create proxy
+docker network create proxy && docker network create sec && docker network create dev
 ```
-
-```bash
-docker network create sec
-```
-
-(Only for category `development`)
-
-```bash
-docker network create dev
-```
-
-If the Docker network `dev` is used, the [`docker-compose.yml`](./homelab/basic/nginx-proxy-manager/docker-compose.yml) must be adapted by the Nginx Proxy Manager.

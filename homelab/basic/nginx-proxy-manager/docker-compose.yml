@@ -36,12 +36,12 @@ services:
     networks:
       - proxy
       - sec
-#      - dev
+      - dev
 
 networks:
   proxy:
     external: true
   sec:
     external: true
-#  dev:
-#    external: true
+  dev:
+    external: true
