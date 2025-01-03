@@ -4,30 +4,59 @@ This repository is a collection of Docker Compose files in which some best pract
 
 In addition, bind mounts are used for all Docker Compose containers.
 
-**Reference**: [https://docs.docker.com/compose/compose-file/05-services/#long-syntax-5](https://docs.docker.com/compose/compose-file/05-services/#long-syntax-5)
+To keep it as simple as possible, the reverse proxy [**Nginx Proxy Manager**](https://nginxproxymanager.com/setup/) was chosen. It enables easy creation of secure connections while minimizing the number of exposed ports.
 
-> This repository also serves as an example for [`domposy`](https://github.com/fuchs-fabian/domposy).
+The Docker Compose files are written in the [**long syntax**](https://docs.docker.com/compose/compose-file/05-services/#long-syntax-5), which is recommended for better readability and maintainability.
 
-## Categories
+There are direct links to the container images in the Docker Compose files, allowing you to easily check for newer versions before starting the container. You can then update the `.env` file accordingly.
 
-| Category (Folder)             | Description                                                                |
-|-------------------------------|----------------------------------------------------------------------------|
-| [`development`](./development/) | Docker Compose files for setting up and managing development environments  |
-| [`homelab`](./homelab/)         | Docker Compose files designed for a homelab environment                    |
+> This repository also serves as an example for [`domposbi`](https://github.com/fuchs-fabian/domposbi).
 
-### `homelab`
+## Services
 
-| Category (Folder)               | Description                                                              |
-|---------------------------------|--------------------------------------------------------------------------|
-| [`basic`](./homelab/basic/)       | Docker Compose files for "basic" homelab usage                           |
-| [`advanced`](./homelab/advanced/) | Docker Compose files for "advanced" homelab usage                        |
+| Service                                           | Categorization | Official site/repository                                      |
+|---------------------------------------------------|----------------|---------------------------------------------------------------|
+| [`defectdojo`](./defectdojo/)                     | 🟣             | [DefectDojo](https://github.com/DefectDojo/django-DefectDojo) |
+| [`gitea`](./gitea/)                               | 🟢             | [Gitea](https://about.gitea.com)                              |
+| [`gitlab`](./gitlab/)                             | 🟠             | [GitLab](https://about.gitlab.com)                            |
+| [`gitlab-runner`](./gitlab-runner/)               | 🟠             | [GitLab Runner](https://docs.gitlab.com/runner)               |
+| [`heimdall`](./heimdall/)                         | 🟢             | [Heimdall](https://github.com/linuxserver/Heimdall)           |
+| [`jellyfin`](./jellyfin/)                         | 🟢             | [Jellyfin](https://jellyfin.org)                              |
+| [`mongodb`](./mongodb/)                           | 🟣             | [MongoDB](https://www.mongodb.com)                            |
+| [`nextcloud`](./nextcloud/)                       | 🟢             | [Nextcloud](https://nextcloud.com)                            |
+| [`nginx-proxy-manager`](./nginx-proxy-manager/)   | 🟢             | [Nginx Proxy Manager](https://nginxproxymanager.com)          |
+| [`pihole`](./pihole/)                             | 🔵             | [Pi-hole](https://pi-hole.net)                                |
+| [`portainer`](./portainer/)                       | 🔵             | [Portainer](https://www.portainer.io)                         |
+| [`stirling-pdf`](./stirling-pdf/)                 | 🟢             | [Stirling PDF](https://www.stirlingpdf.com)                   |
+| [`uptime-kuma`](./uptime-kuma/)                   | 🟢             | [Uptime Kuma](https://github.com/louislam/uptime-kuma)        |
+| [`vaultwarden`](./vaultwarden/)                   | 🟢             | [Vaultwarden](https://github.com/dani-garcia/vaultwarden)     |
 
-## Additional Information
+> ***Personal categorization***:
+>
+> 🟢 **Must-have**: Essential tools for running a homelab – indispensable
+>
+> 🔵 **Helpful**: Useful tools that make operations easier but are not strictly necessary
+>
+> 🟠 **Nice to have**: Additional tools that enhance comfort and functionality
+>
+> 🟣 **For experts/specialists**: Tools designed for advanced users or specific use cases
 
-Since the reverse proxy [Nginx Proxy Manager](https://nginxproxymanager.com/setup/) is used here to establish secure connections and not have to release so many ports, several Docker networks are used.
+## Getting started
 
-Create therefore the following Docker networks:
+Create the used (external) Docker networks:
 
 ```bash
 docker network create proxy && docker network create sec && docker network create dev
 ```
+
+On your host, navigate to the path where your Docker Compose projects are located.
+
+Download a service:
+
+```bash
+SERVICE="<service>" && mkdir -p "$SERVICE" && \
+wget -P "$SERVICE" https://raw.githubusercontent.com/fuchs-fabian/docker-compose-files/refs/heads/main/$SERVICE/docker-compose.yml && \
+wget -P "$SERVICE" https://raw.githubusercontent.com/fuchs-fabian/docker-compose-files/refs/heads/main/$SERVICE/.env
+```
+
+> Replace `<service>` with the desired service, e.g., `gitea`.
