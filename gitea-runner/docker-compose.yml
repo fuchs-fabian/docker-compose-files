@@ -1,0 +1,26 @@
+services:
+  # https://hub.docker.com/r/gitea/act_runner
+  gitea-runner:
+    container_name: gitea-runner
+    image: gitea/act_runner:${GITEA_RUNNER_VERSION:-nightly}
+    restart: unless-stopped
+    environment:
+      GITEA_INSTANCE_URL: "${INSTANCE_URL}"
+      GITEA_RUNNER_REGISTRATION_TOKEN: "${REGISTRATION_TOKEN}"
+      GITEA_RUNNER_NAME: "${RUNNER_NAME:-general}"
+    volumes:
+      - type: bind
+        source: ./volumes/gitea-runner/data
+        target: /data
+        bind:
+          create_host_path: true
+      # Comment out the following bind mount if no docker.sock is required
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+    networks:
+      - net
+
+networks:
+  net:
+    driver: bridge
