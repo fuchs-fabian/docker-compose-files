@@ -14,22 +14,23 @@ There are direct links to the container images in the Docker Compose files, allo
 
 ## Services
 
-| Service                                           | Categorization | Official site/repository                                      |
-|---------------------------------------------------|----------------|---------------------------------------------------------------|
-| [`defectdojo`](./defectdojo/)                     | 🟣             | [DefectDojo](https://github.com/DefectDojo/django-DefectDojo) |
-| [`gitea`](./gitea/)                               | 🟢             | [Gitea](https://about.gitea.com)                              |
-| [`gitlab`](./gitlab/)                             | 🟠             | [GitLab](https://about.gitlab.com)                            |
-| [`gitlab-runner`](./gitlab-runner/)               | 🟠             | [GitLab Runner](https://docs.gitlab.com/runner)               |
-| [`heimdall`](./heimdall/)                         | 🟢             | [Heimdall](https://github.com/linuxserver/Heimdall)           |
-| [`jellyfin`](./jellyfin/)                         | 🟢             | [Jellyfin](https://jellyfin.org)                              |
-| [`mongodb`](./mongodb/)                           | 🟣             | [MongoDB](https://www.mongodb.com)                            |
-| [`nextcloud`](./nextcloud/)                       | 🟢             | [Nextcloud](https://nextcloud.com)                            |
-| [`nginx-proxy-manager`](./nginx-proxy-manager/)   | 🟢             | [Nginx Proxy Manager](https://nginxproxymanager.com)          |
-| [`pihole`](./pihole/)                             | 🔵             | [Pi-hole](https://pi-hole.net)                                |
-| [`portainer`](./portainer/)                       | 🔵             | [Portainer](https://www.portainer.io)                         |
-| [`stirling-pdf`](./stirling-pdf/)                 | 🟢             | [Stirling PDF](https://www.stirlingpdf.com)                   |
-| [`uptime-kuma`](./uptime-kuma/)                   | 🟢             | [Uptime Kuma](https://github.com/louislam/uptime-kuma)        |
-| [`vaultwarden`](./vaultwarden/)                   | 🟢             | [Vaultwarden](https://github.com/dani-garcia/vaultwarden)     |
+| Service                                           | Categorization | Official site/repository                                        |
+|---------------------------------------------------|----------------|-----------------------------------------------------------------|
+| [`defectdojo`](./defectdojo/)                     | 🟣             | [DefectDojo](https://github.com/DefectDojo/django-DefectDojo)   |
+| [`gitea`](./gitea/)                               | 🟢             | [Gitea](https://about.gitea.com)                                |
+| [`gitea-runner`](./gitea-runner/)                 | 🔵             | [Gitea Runner](https://docs.gitea.com/usage/actions/act-runner) |
+| [`gitlab`](./gitlab/)                             | 🟠             | [GitLab](https://about.gitlab.com)                              |
+| [`gitlab-runner`](./gitlab-runner/)               | 🟠             | [GitLab Runner](https://docs.gitlab.com/runner)                 |
+| [`heimdall`](./heimdall/)                         | 🟢             | [Heimdall](https://github.com/linuxserver/Heimdall)             |
+| [`jellyfin`](./jellyfin/)                         | 🟢             | [Jellyfin](https://jellyfin.org)                                |
+| [`mongodb`](./mongodb/)                           | 🟣             | [MongoDB](https://www.mongodb.com)                              |
+| [`nextcloud`](./nextcloud/)                       | 🟢             | [Nextcloud](https://nextcloud.com)                              |
+| [`nginx-proxy-manager`](./nginx-proxy-manager/)   | 🟢             | [Nginx Proxy Manager](https://nginxproxymanager.com)            |
+| [`pihole`](./pihole/)                             | 🔵             | [Pi-hole](https://pi-hole.net)                                  |
+| [`portainer`](./portainer/)                       | 🔵             | [Portainer](https://www.portainer.io)                           |
+| [`stirling-pdf`](./stirling-pdf/)                 | 🟢             | [Stirling PDF](https://www.stirlingpdf.com)                     |
+| [`uptime-kuma`](./uptime-kuma/)                   | 🟢             | [Uptime Kuma](https://github.com/louislam/uptime-kuma)          |
+| [`vaultwarden`](./vaultwarden/)                   | 🟢             | [Vaultwarden](https://github.com/dani-garcia/vaultwarden)       |
 
 > ***Personal categorization***:
 >
